@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精英科技 - 尊享会员激活</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6C5CE7;
+            --secondary-color: #00CEFF;
+            --accent-color: #FF7675;
+            --dark-color: #2D3436;
+            --light-color: #F5F6FA;
+            --gradient-primary: linear-gradient(135deg, #6C5CE7 0%, #00CEFF 100%);
+            --gradient-accent: linear-gradient(135deg, #FF7675 0%, #FDCB6E 100%);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .page {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        opacity 0.6s ease, 
+                        visibility 0.6s;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+        
+        .page.active {
+            transform: translateX(0) rotateY(0);
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+        
+        .page.inactive-right {
+            transform: translateX(100%) rotateY(15deg);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 0;
+        }
+        
+        .page.inactive-left {
+            transform: translateX(-100%) rotateY(-15deg);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 0;
+        }
+        
+        /* 注册页面样式 */
+        .form-container {
+            padding: 40px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: rgba(245, 245, 245, 0.5);
+        }
+        
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+            background-color: white;
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .char-count {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-size: 12px;
+            color: #999;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        .btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        /* 超高端激活页面样式 */
+        .luxury-activation {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 100%;
+        }
+        
+        .luxury-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(0, 206, 255, 0.08) 0%, transparent 25%);
+            z-index: 0;
+        }
+        
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 60px 50px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.05),
+                0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            margin: 40px;
+            transform-style: preserve-3d;
+        }
+        
+        .luxury-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-primary);
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        .luxury-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-accent);
+            clip-path: polygon(0 100%, 100% 100%, 0 0);
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        .luxury-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.3);
+            border: 4px solid white;
+            animation: pulse 2s infinite ease-in-out;
+            transform: translateZ(20px);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1) translateZ(20px); }
+            50% { transform: scale(1.05) translateZ(20px); }
+            100% { transform: scale(1) translateZ(20px); }
+        }
+        
+        .luxury-icon svg {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+        
+        .luxury-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            transform: translateZ(30px);
+        }
+        
+        .luxury-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+        
+        .welcome-luxury {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            transform: translateZ(20px);
+        }
+        
+        .activation-luxury-box {
+            background: rgba(249, 249, 249, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            border-left: 5px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            transform: translateZ(15px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .activation-luxury-box:hover {
+            transform: translateY(-5px) translateZ(15px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .activation-luxury-text {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #555;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .highlight-luxury {
+            color: var(--primary-color);
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight-luxury::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-accent);
+            z-index: -1;
+            opacity: 0.3;
+            border-radius: 2px;
+        }
+        
+        .account-display {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 25px;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .account-display:hover {
+            background: rgba(108, 92, 231, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .luxury-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px 0;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            transform: translateZ(20px);
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .luxury-btn:hover {
+            transform: translateY(-5px) translateZ(20px);
+            box-shadow: 0 12px 30px rgba(108, 92, 231, 0.4);
+        }
+        
+        .luxury-btn:active {
+            transform: translateY(0) translateZ(20px);
+        }
+        
+        .luxury-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+        }
+        
+        .luxury-btn:hover::before {
+            left: 100%;
+        }
+        
+        .luxury-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .luxury-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(0) translateX(20px); }
+            75% { transform: translateY(20px) translateX(10px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+        
+        /* 保证金规则页面样式 */
+        .rules-container {
+            padding: 30px;
+        }
+        
+        .rules-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            margin: -30px -30px 30px -30px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .rules-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 26px;
+            padding-bottom: 0;
+        }
+        
+        .rules-header h1::after {
+            display: none;
+        }
+        
+        .rules-content {
+            margin-bottom: 30px;
+        }
+        
+        .rule-item {
+            margin-bottom: 20px;
+            padding-left: 35px;
+            position: relative;
+            font-size: 15px;
+        }
+        
+        .rule-item:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 18px;
+        }
+        
+        .rule-item strong {
+            color: var(--primary-color);
+        }
+        
+        .warning-box {
+            background-color: #FFF9E6;
+            border-left: 5px solid #FFD166;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .warning-box strong {
+            color: #FF9E16;
+        }
+        
+        .warning-box ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        
+        .warning-box li {
+            margin-bottom: 8px;
+        }
+        
+        .address-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f5f5f5;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px dashed #ccc;
+            margin: 30px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .address-container:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f0f0;
+        }
+        
+        .address-text {
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            font-size: 15px;
+            margin-right: 15px;
+            user-select: all;
+            font-weight: 500;
+        }
+        
+        .copy-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+            font-weight: 500;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .copy-btn.copied {
+            background: var(--gradient-accent);
+        }
+        
+        .network-tag {
+            display: inline-block;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        
+        .rules-footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #757575;
+            font-size: 13px;
+        }
+        
+        .back-btn {
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        
+        .back-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        /* 3D浮动效果 */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px) translateZ(0); }
+            50% { transform: translateY(-15px) translateZ(10px); }
+            100% { transform: translateY(0px) translateZ(0); }
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .form-container, .rules-container {
+                padding: 25px;
+            }
+            
+            .luxury-card {
+                padding: 40px 30px;
+                margin: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .luxury-title {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-container, .rules-container {
+                padding: 20px;
+            }
+            
+            .luxury-card {
+                padding: 30px 20px;
+                margin: 20px 15px;
+            }
+            
+            .luxury-icon {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .luxury-title {
+                font-size: 24px;
+            }
+            
+            .activation-luxury-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 注册页面 -->
+        <div id="registerPage" class="page active">
+            <div class="form-container">
+                <h1 class="floating">创建精英会员账号</h1>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="nickname">尊称</label>
+                        <input type="text" id="nickname" name="nickname" placeholder="请输入您的尊称" required>
+                        <div class="error-message" id="nicknameError">尊称不能为空</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account">专属账号</label>
+                        <input type="text" id="account" name="account" placeholder="请输入专属账号" maxlength="8" required>
+                        <span class="char-count" id="charCount">4/8</span>
+                        <div class="error-message" id="accountError">账号不能超过8个字符</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">安全密码</label>
+                        <input type="password" id="password" name="password" placeholder="请输入安全密码" required>
+                        <div class="error-message" id="passwordError">密码不能为空</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">联系方式</label>
+                        <input type="tel" id="phone" name="phone" placeholder="请输入11位手机号" pattern="[0-9]{11}" required>
+                        <div class="error-message" id="phoneError">请输入有效的手机号码</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">电子邮箱</label>
+                        <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+                        <div class="error-message" id="emailError">请输入有效的邮箱地址</div>
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        <span class="animate__animated animate__pulse animate__infinite" style="display: inline-block;">
+                            立即注册精英会员
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 超高端激活页面 -->
+        <div id="activationPage" class="page inactive-right">
+            <div class="luxury-activation">
+                <div class="luxury-overlay"></div>
+                <div class="luxury-decoration" id="decoration"></div>
+                
+                <div class="luxury-card animate__animated animate__fadeIn">
+                    <div class="luxury-icon floating">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11V11.99z"/>
+                        </svg>
+                    </div>
+                    <h1 class="luxury-title">注册成功-待激活</h1>
+                    <div class="welcome-luxury">欢迎加入萧哥抖音脚本引流科技，精英会员即享蓝海项目市场！</div>
+                    
+                    <div class="activation-luxury-box floating">
+                        <p class="activation-luxury-text">
+                            尊敬的<span id="displayNickname" class="highlight-luxury"></span>阁下：<br><br>
+                            为保障服务品质与会员权益，请缴纳<span class="highlight-luxury">500U精英保证金</span>激活<br>
+                            您的会员账户：<br>
+                            <span id="displayAccount" class="account-display"></span><br><br>
+                            完成激活后即可尊享全部精英特权与专属服务
+                        </p>
+                    </div>
+                    
+                    <button class="luxury-btn" onclick="showRules()">
+                        <span class="animate__animated animate__pulse animate__infinite" style="display: inline-block;">
+                            立即激活精英特权
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 保证金规则页面 -->
+        <div id="rulesPage" class="page inactive-right">
+            <div class="rules-container">
+                <div class="rules-header floating">
+                    <h1>精英会员保证金规则</h1>
+                </div>
+                
+                <div class="rules-content">
+                    <div class="rule-item">
+                        <strong>严禁使用脚本私自开展非授权业务</strong>，所有业务必须为本公司引流！
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>禁止添加业务员QQ干扰工作</strong>，违者视为同行恶意竞争行为！
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>违规处理</strong>：立即终止服务，扣除全部保证金，并永久取消会员资格！
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>退出机制</strong>：项目停止或自愿退出时，可申请保证金全额退款（账户同步停封）
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>重要提示：</strong>请仔细阅读并遵守精英会员守则，违规操作将导致保证金被扣除且无法申诉。
+                </div>
+                
+                <h2>缴纳会员保证金</h2>
+                <p>请通过TRC20网络转账至专属会员唯一地址：</p>
+                
+                <div class="address-container floating">
+                    <span class="address-text" id="trc20Address">TPMjEkynEm7cgEB8WRXGrVDo2nGLYjXZZN</span>
+                    <button class="copy-btn" id="copyBtn">复制地址</button>
+                    <span class="network-tag">TRC20</span>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>缴纳注意事项：</strong>
+                    <ul>
+                        <li>请务必核对地址完全正确</li>
+                        <li>处理时间：转账完成后五分钟内系统自动完成激活认证</li>
+                        <li>如遇到其他问题请联系官方客服</li>
+                    </ul>
+                </div>
+                
+                <div class="rules-footer">
+                    <p>萧哥抖音引流脚本会员系统 · 抖音自动引流脚本营销解决方案专家</p>
+                    <p>© 2020 萧哥传媒有限公司 版权所有</p>
+                </div>
+                
+                <button class="btn back-btn" onclick="backToActivation()">
+                    <i class="fas fa-arrow-left"></i> 返回激活页面
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 实时显示账户字符数
+        document.getElementById('account').addEventListener('input', function() {
+            const count = this.value.length;
+            document.getElementById('charCount').textContent = `${count}/8`;
+            
+            if (count > 8) {
+                document.getElementById('accountError').style.display = 'block';
+            } else {
+                document.getElementById('accountError').style.display = 'none';
+            }
+        });
+
+        // 表单验证和提交
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const nickname = document.getElementById('nickname').value;
+            const account = document.getElementById('account').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            
+            // 验证昵称
+            if (nickname.length === 0) {
+                document.getElementById('nicknameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('nicknameError').style.display = 'none';
+            }
+            
+            // 验证账户
+            if (account.length > 8) {
+                document.getElementById('accountError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('accountError').style.display = 'none';
+            }
+            
+            // 验证密码
+            if (password.length === 0) {
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('passwordError').style.display = 'none';
+            }
+            
+            // 验证手机号
+            if (!/^[0-9]{11}$/.test(phone)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // 验证邮箱
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').style.display = 'none';
+            }
+            
+            if (isValid) {
+                // 显示加载动画
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.innerHTML = '<span class="animate__animated animate__fadeIn">正在验证...</span>';
+                btn.disabled = true;
+                
+                // 模拟API请求延迟
+                setTimeout(() => {
+                    // 显示用户信息
+                    document.getElementById('displayNickname').textContent = nickname;
+                    document.getElementById('displayAccount').textContent = account;
+                    
+                    // 切换到激活页面
+                    switchPage('activationPage');
+                    
+                    // 恢复按钮状态
+                    btn.innerHTML = '<span class="animate__animated animate__pulse animate__infinite" style="display: inline-block;">立即注册精英会员</span>';
+                    btn.disabled = false;
+                }, 1500);
+            }
+        });
+        
+        function showRules() {
+            // 添加切换动画
+            const btn = event.currentTarget;
+            btn.innerHTML = '<span>正在跳转...</span>';
+            
+            setTimeout(() => {
+                // 切换到规则页面
+                switchPage('rulesPage');
+                
+                // 恢复按钮状态
+                btn.innerHTML = '<span class="animate__animated animate__pulse animate__infinite" style="display: inline-block;">立即激活精英特权</span>';
+            }, 500);
+        }
+        
+        function backToActivation() {
+            // 返回到激活页面
+            switchPage('activationPage');
+        }
+        
+        function switchPage(pageId) {
+            // 获取当前活动页面
+            const activePage = document.querySelector('.page.active');
+            
+            // 设置当前页面离开动画方向
+            if (pageId === 'activationPage' && activePage.id === 'registerPage') {
+                activePage.classList.remove('active');
+                activePage.classList.add('inactive-left');
+            } else if (pageId === 'rulesPage' && activePage.id === 'activationPage') {
+                activePage.classList.remove('active');
+                activePage.classList.add('inactive-left');
+            } else {
+                activePage.classList.remove('active');
+                activePage.classList.add('inactive-right');
+            }
+            
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            targetPage.classList.remove('inactive-left', 'inactive-right');
+            targetPage.classList.add('active');
+            
+            // 添加3D动画效果
+            if (targetPage.id === 'activationPage') {
+                targetPage.querySelector('.luxury-card').classList.add('animate__fadeIn');
+            }
+        }
+        
+        // 复制地址功能
+        document.getElementById('copyBtn').addEventListener('click', async function() {
+            const address = document.getElementById('trc20Address').textContent;
+            const btn = document.getElementById('copyBtn');
+            
+            try {
+                // 尝试使用现代 Clipboard API
+                await navigator.clipboard.writeText(address);
+                showCopyFeedback(btn);
+            } catch (err) {
+                // 回退到execCommand方法
+                try {
+                    const range = document.createRange();
+                    range.selectNode(document.getElementById('trc20Address'));
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    
+                    const successful = document.execCommand('copy');
+                    window.getSelection().removeAllRanges();
+                    
+                    if (successful) {
+                        showCopyFeedback(btn);
+                    } else {
+                        // 显示手动复制提示
+                        alert('请手动选择地址并复制');
+                    }
+                } catch (err) {
+                    alert('请手动选择地址并复制');
+                }
+            }
+        });
+        
+        function showCopyFeedback(btn) {
+            btn.textContent = '已复制';
+            btn.classList.add('copied');
+            
+            // 添加动画效果
+            btn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 200);
+            
+            setTimeout(() => {
+                btn.textContent = '复制地址';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+        
+        // 添加装饰性粒子
+        document.addEventListener('DOMContentLoaded', function() {
+            const decoration = document.getElementById('decoration');
+            
+            // 创建更多粒子
+            for (let i = 0; i < 30; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'luxury-dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.top = Math.random() * 100 + '%';
+                dot.style.width = (Math.random() * 8 + 4) + 'px';
+                dot.style.height = dot.style.width;
+                dot.style.opacity = Math.random() * 0.15 + 0.05;
+                dot.style.animationDelay = Math.random() * 15 + 's';
+                dot.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                decoration.appendChild(dot);
+            }
+            
+            // 添加浮动效果
+            const floatingElements = document.querySelectorAll('.floating');
+            floatingElements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.2) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
